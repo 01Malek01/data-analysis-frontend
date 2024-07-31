@@ -1,0 +1,38 @@
+.hero {
+  width: 100%;
+  height: 100vh;
+  background-image: url('/assets/images/_92a530ea-dafc-437e-ae28-1fd33a31786d.jpg'); /* Assuming the image path is correct */
+  background-position: center; /* Center the image horizontally and vertically */
+  background-repeat: no-repeat; /* Prevent image tiling */
+  background-size: cover; /* Resize image to cover the entire container */
+  opacity: 0.8; /* Set low opacity for a subtle effect */
+  transition: opacity 0.3s ease-in-out; /* Add a smooth opacity transition */
+  z-index: 5;
+}
+
+
+
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -5;
+  top: 69.8px;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Ensure it covers the entire container */
+  background-color: rgba(0, 0, 0, 0.774); /* Add a dark overlay with low opacity */
+}
+
+
+@media screen and ((min-width:768px) and ( max-width: 1024px)) {
+  .feature {
+    width: 100% !important;
+  }
+  .step {
+    width: 100% !important;
+  }
+  .f-image {
+    margin-left: 6rem !important;
+  }
+  
+}
