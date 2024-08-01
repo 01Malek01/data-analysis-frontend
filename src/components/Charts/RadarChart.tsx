@@ -1,30 +1,40 @@
-import { Bar } from "react-chartjs-2";
+import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
   Tooltip,
   Legend,
 } from "chart.js";
 
 // Register necessary components
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
   Tooltip,
   Legend
 );
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+    },
+    title: {
+      display: true,
+      text: "Pie Chart Example",
+    },
+  },
+};
 
-
-export default function BarChart({ data }) {
+export default function RadarChart({ data }) {
   const xValues = data?.map((el) => Object.values(el)[0]);
   const yValues = data?.map((el) => Object.values(el)[1]);
 
-  // const labels = [...xValues];
   const dataToShow = {
     labels: xValues,
     datasets: [
@@ -53,27 +63,9 @@ export default function BarChart({ data }) {
       },
     ],
   };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Bar Chart Example",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
   return (
     <div style={{ width: "50%", margin: "auto" }}>
-      <Bar data={dataToShow} options={options} />
+      <Radar data={dataToShow} options={options} />
     </div>
   );
 }

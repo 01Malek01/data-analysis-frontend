@@ -1,10 +1,9 @@
 import { InboxOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UploadProps } from "antd";
-import { Button, Form, Upload } from "antd";
-import axios from "axios";
+import { Form, Upload } from "antd";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { read, utils, WorkBook, WorkSheet } from "xlsx";
@@ -12,7 +11,10 @@ import { z } from "zod";
 import { storage } from "../../firebaseConfig";
 
 import { useAuth0 } from "@auth0/auth0-react";
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
+import useUploadDownloadUrl from "../../hooks/api/useUploadDownloadUrl";
+import CustomButton from "../UI/CustomButton";
+import useUploadFileData from "../../hooks/api/useUploadData";
+import { useFileContext } from "../../Context/FileContext";
 
 const { Dragger } = Upload;
 
@@ -43,16 +45,13 @@ const excelFileSchema = z.object({
 
 type FormData = z.infer<typeof excelFileSchema>;
 
-const FileUpload = ({
-  nextStep,
-  setFileData,
-}: {
-  nextStep: () => void;
-  setFileData: (data: any[] | null) => void; // Update type here if you expect a specific type of JSON
-}) => {
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [jsonData, setJsonData] = useState<any[] | null>(null); // Update type if needed
+const FileUpload = ({ nextStep, setFileData }) => {
+  const { uploadDownloadUrl } = useUploadDownloadUrl();
+  const { isAuthenticated } = useAuth0();
+  const { selectedFile, setSelectedFile } = useFileContext();
+  const { uploadFileData } = useUploadFileData();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  const [jsonData, setJsonData] = useState(null); // Update type if needed
 
   const {
     control,
@@ -61,19 +60,24 @@ const FileUpload = ({
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
-      excelFile: undefined, // Adjust default value to undefined for optional File input
+      excelFile: undefined,
     },
     resolver: zodResolver(excelFileSchema),
     mode: "onChange",
   });
 
-  const onChange = (info: { file: { originFileObj: File } }) => {
+  useEffect(() => {
+    if (selectedFile) {
+      setValue("excelFile", selectedFile);
+    }
+  }, [setValue, selectedFile]);
+  const setFile = (info: { file: { originFileObj: File } }) => {
     try {
       const reader = new FileReader();
 
       reader.readAsArrayBuffer(info.file.originFileObj);
 
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const arrayBuffer = e?.target?.result as ArrayBuffer;
 
         const workbook: WorkBook = read(arrayBuffer, { type: "array" });
@@ -82,16 +86,27 @@ const FileUpload = ({
 
         const worksheet: WorkSheet = workbook.Sheets[sheetName];
 
-        const jsonData = utils.sheet_to_json(worksheet);
-
-        setJsonData(jsonData);
-        setFileData(jsonData);
+        const jsonDataFromSheet = utils.sheet_to_json(worksheet);
+        await uploadFileData({
+          name: info.file.originFileObj.name,
+          data: jsonDataFromSheet,
+          fileType: info.file.originFileObj.type,
+        });
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
+        setJsonData(jsonDataFromSheet);
+        setFileData(jsonDataFromSheet);
         setSelectedFile(info.file.originFileObj);
         setValue("excelFile", info.file.originFileObj);
       };
     } catch (err) {
       console.log(err);
+      toast.error("File upload failed.Please try again Later");
     }
+  };
+
+  const onChange = (info: { file: { originFileObj: File } }) => {
+    setFile(info);
   };
 
   const onSubmit = async (data: FormData) => {
@@ -103,6 +118,9 @@ const FileUpload = ({
 
     uploadTask.on(
       "state_changed",
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (snapshot) => {
         // Handle upload progress if needed
       },
@@ -111,24 +129,10 @@ const FileUpload = ({
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          const token = await getAccessTokenSilently();
-          axios
-            .post(
-              `${import.meta.env.VITE_BACKEND_URL}/data-source/upload`,
-              {
-                uploadUrl: downloadURL,
-                name: file.name,
-                type: file.type,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            )
-            .catch(() => {
-              toast.error("Failed to store file URL.");
-            });
+          uploadDownloadUrl({
+            downloadURL,
+            file,
+          });
         });
         nextStep();
       }
@@ -147,23 +151,29 @@ const FileUpload = ({
         name="excelFile"
         render={({ field }) => (
           <Dragger
+            className=""
             {...props}
             onChange={(info) => {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-expect-error
               onChange(info);
-              field.onChange(info.file.originFileObj); // Sync with react-hook-form
+              if (info.file.originFileObj && info.file) {
+                field.onChange(info.file.originFileObj); // Sync with react-hook-form
+              }
             }}
           >
             {selectedFile ? (
-              <>
+              <div className="flex flex-col">
                 <p className="text-xl pb-5">
                   Selected file :{" "}
-                  <span className="text-blue-600">{selectedFile.name}</span>
+                  <span className="text-blue-600 text-center">{selectedFile.name}</span>
                 </p>
                 <p className="text-xl">
                   File type :{" "}
-                  <span className="text-blue-600">{selectedFile.type}</span>
+                  <span className="text-blue-600 text-center text-sm md:text-lg ">{selectedFile.type}</span>
                 </p>
-              </>
+                <span className="text-xl text-slate-500/80 mt-5 text-center">Click To Change File</span>
+              </div>
             ) : (
               <>
                 <p className="ant-upload-drag-icon">
@@ -187,12 +197,7 @@ const FileUpload = ({
         )}
       </span>
       <Form.Item>
-        <Button
-          htmlType="submit"
-          className="!min-w-60 !h-[3rem] !bg-blue-500 !text-white font-bold py-2 px-4 rounded !flex !items-center !justify-center mx-auto mt-8 hover:scale-105 "
-        >
-          Proceed to Next Step <FaRegArrowAltCircleRight size={20} />
-        </Button>
+        <CustomButton title="Proceed to next step" />
       </Form.Item>
     </Form>
   ) : (

@@ -10,6 +10,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import DataIngestion from "../pages/DataIngestion/DataIngestion";
 import Layout from "../components/Layout/Layout";
 import AuthCallbackPage from "../pages/AuthCallback";
+import VisualizePage from "../pages/VisualizePage/VisualizePage";
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/ingest-data", element: <DataIngestion /> },
       {path:"/auth-callback" , element: <AuthCallbackPage />},
+      {path:"/visualize/:id/:chartType" , element: <VisualizePage />},
     ],
   },
 ]);

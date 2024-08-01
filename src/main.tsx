@@ -6,6 +6,7 @@ import Auth0Wrapper from "./components/Auth/Auth0Wrapper.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import FileContextProvider from './Context/FileContext.tsx';
 
 const client = new QueryClient({
   defaultOptions: {
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={client}>
       <Auth0Wrapper>
-        <App />
+        <FileContextProvider>
+          <App />
+        </FileContextProvider>
         <ToastContainer />
       </Auth0Wrapper>
     </QueryClientProvider>

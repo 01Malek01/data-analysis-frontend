@@ -7,7 +7,6 @@ import { Menu } from "antd"; // Assuming you're keeping Ant Design's Menu
 import { useAuth0 } from "@auth0/auth0-react";
 import type { MenuProps } from "antd"; // Importing type for MenuProps
 
-
 interface MenuItem {
   label: string;
   key: string;
@@ -38,10 +37,16 @@ const Header: React.FC = () => {
     {
       label: isAuthenticated ? "Profile" : "",
       key: isAuthenticated ? "profile" : "",
+      children: [
+        {
+          label: isAuthenticated ? "Sign Out" : "Sign In",
+          key: isAuthenticated ? "logout" : "signin",
+        },
+      ],
     },
     {
-      label: isAuthenticated ? "Sign Out" : "Sign In",
-      key: isAuthenticated ? "logout" : "signin",
+      label: isAuthenticated ? "" : "Sign In",
+      key: isAuthenticated ? "" : "signin",
     },
   ];
 
@@ -51,6 +56,8 @@ const Header: React.FC = () => {
       loginWithRedirect();
     } else if (e.key === "logout") {
       logout();
+    } else if (e.key === "profile") {
+      return;
     } else {
       navigate(e.key);
     }

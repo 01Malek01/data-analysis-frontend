@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import VisualizationChoice from "../Charts/VisualizationChoice";
 
 function VisualizeStep({ fileData }) {
- const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(false);
   useEffect(() => {
     console.log("file data", fileData);
 
@@ -12,6 +13,8 @@ function VisualizeStep({ fileData }) {
 
       // Check if there are at least two properties and validate the types
       if (values.length < 2) return false;
+      // eslint-disable-next-line
+      //@ts-expect-error
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [firstValue, secondValue] = values;
       return typeof secondValue === "number";
@@ -28,11 +31,14 @@ function VisualizeStep({ fileData }) {
 
   return (
     <div>
-    {isValid? (
-      <span className="m-2">Choose the chart you want to use</span>
-    ) : (
-      <span className="m-2 text-red-500">Sheet must be 2 columns to visualize it using charts.</span>
-    )}
+      {isValid ? (
+        <VisualizationChoice fileData={fileData} />
+      ) : (
+        <span className="m-2 text-red-500">
+          Sheet must be 2 columns and data must be numeric to visualize it using
+          charts.{" "}
+        </span>
+      )}
     </div>
   );
 }

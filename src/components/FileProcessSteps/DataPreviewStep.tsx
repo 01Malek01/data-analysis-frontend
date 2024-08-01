@@ -1,11 +1,11 @@
-import { Button, Table, TableColumnsType } from "antd";
+import { Table, TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
+import CustomButton from "../UI/CustomButton";
 
 // Define a type for the data rows
 interface DataType {
   key: React.Key;
-  
+
   [key: string]: unknown; // This allows for any additional keys with values of any type
 }
 
@@ -16,15 +16,7 @@ interface ColumnType {
   key: string;
 }
 
-interface DataPreviewStepProps {
-  fileData: DataType[];
-  nextStep: () => void;
-}
-
-export default function DataPreviewStep({
-  fileData,
-  nextStep,
-}: DataPreviewStepProps) {
+export default function DataPreviewStep({ fileData, nextStep }) {
   const [data, setData] = useState<DataType[]>([]);
   const [columns, setColumns] = useState<TableColumnsType<DataType>>([]);
 
@@ -41,8 +33,7 @@ export default function DataPreviewStep({
 
       // Extract data
       const tableData = fileData.map((row, index) => ({
-       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-       //@ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         key: index,
         ...row,
       }));
@@ -61,13 +52,7 @@ export default function DataPreviewStep({
           columns={columns}
           className="w-full"
         />
-        <Button
-          onClick={nextStep}
-          htmlType="submit"
-          className="!min-w-60 !h-[3rem] !bg-blue-500 !text-white font-bold mb-6 py-2 px-4 rounded !flex !items-center !justify-center mx-auto mt-8 hover:scale-105 "
-        >
-          Proceed to Next Step <FaRegArrowAltCircleRight size={20} />
-        </Button>
+        <CustomButton title="Proceed to next step" onClick={nextStep} styles="mb-7" />
       </div>
     </>
   );

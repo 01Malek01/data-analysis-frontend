@@ -1,26 +1,25 @@
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 // Register necessary components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-export default function BarChart({ data }) {
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+    },
+    title: {
+      display: true,
+      text: "Pie Chart Example",
+    },
+  },
+};
+
+export default function PieChart({ data }) {
   const xValues = data?.map((el) => Object.values(el)[0]);
   const yValues = data?.map((el) => Object.values(el)[1]);
 
@@ -53,27 +52,9 @@ export default function BarChart({ data }) {
       },
     ],
   };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Bar Chart Example",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
   return (
     <div style={{ width: "50%", margin: "auto" }}>
-      <Bar data={dataToShow} options={options} />
+      <Pie data={dataToShow} options={options} />
     </div>
   );
 }
