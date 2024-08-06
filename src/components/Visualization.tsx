@@ -11,6 +11,7 @@ import useGetDownloadUrl, {
 } from "../hooks/api/useGetDownloadUrl";
 import TableComponent from "./Table";
 import ChartTypeDropdown from "./ChartTypeDropdown";
+import { formatDate } from "../utils/FormatDate";
 
 // Define types for props
 interface VisualizationProps {
@@ -101,7 +102,7 @@ const Visualization: React.FC<VisualizationProps> = ({ id, type }) => {
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-col gap-1 justify-center items-start">
               <strong>Name:</strong> {fileState?.name}
-              <strong>Date of Creation:</strong> {fileState?.createdAt}
+              <strong>Date of Creation:</strong> {formatDate(fileState?.createdAt)}
               <strong>File Type:</strong> {fileState?.fileType}
               <Link
                 className="text-blue-500 underline"

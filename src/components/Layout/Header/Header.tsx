@@ -28,7 +28,7 @@ const Header: React.FC = () => {
     {
       label: isAuthenticated ? "Dashboard" : "",
       key: isAuthenticated ? "dashboard" : "dashboard",
-      icon:  isAuthenticated ? <MdDashboard /> : "" ,
+      icon: isAuthenticated ? <MdDashboard /> : "",
     },
     {
       label: "Ingest Data",
@@ -36,12 +36,16 @@ const Header: React.FC = () => {
       icon: <TbDatabaseImport />,
     },
     {
-      label: isAuthenticated ? "Profile" : "",
-      key: isAuthenticated ? "profile" : "",
+      label: isAuthenticated ? "Account" : "",
+      key: isAuthenticated ? "account" : "",
       children: [
         {
           label: isAuthenticated ? "Sign Out" : "Sign In",
           key: isAuthenticated ? "logout" : "signin-child",
+        },
+        {
+          label: isAuthenticated ? "Profile" : "",
+          key: isAuthenticated ? "profile" : "profile",
         },
       ],
     },

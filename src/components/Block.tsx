@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { formatDate } from "../utils/FormatDate";
 function Block({
   name,
   fileType,
@@ -11,8 +11,7 @@ function Block({
   onClick?: () => void;
   chartType?: string;
 }) {
-  const date = dayjs(createdAt);
-  const formattedDate = date.format("DD/MM/YYYY HH:mm:ss");
+  const formattedDate = formatDate(createdAt);
 
   return (
     <div className="block-wrapper">

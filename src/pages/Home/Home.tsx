@@ -91,42 +91,46 @@ function Home() {
           whileInView={{ backgroundColor: "#4592FF" }}
           transition={{ duration: 1, delay: 0.2 }}
           ref={featuresRef}
-          className="features  flex flex-col justify-center items-center gap-6 py-5 pb-8"
+          className="features  flex flex-col justify-center items-center gap-6 py-5 pb-8 h-screen"
         >
-          {/*ADD A VIDEO ILLUSTRATION AFTER FINISHING THE  */}
+          {/*ADD A VIDEO ILLUSTRATION AFTER FINISHING THE  app */}
           <h2 className=" text-4xl font-bold  text-gray-800 m-5 mb-10 text-center">
             {" "}
             Features
           </h2>
-          {featureCards.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ x: "-100vw", opacity: 0 }}
-              animate={isInView ? { x: 0, opacity: 1 } : {}}
-              transition={{ duration: 1, delay: 0.5 * (index + 1) }}
-              className={`feature w-[50%] h-[10rem] mb-5 px-3  ml-[${
-                -30 + index * 10
-              }%]`}
-            >
-              <Card className="bg-slate-100">
-                <div className="content flex flex-row gap-3">
-                  <div className="flex flex-col gap-2">
-                    <span className="feature-title">{feature.title}</span>
-                    <span className="feature-desc text-[12px] tracking-tight">
-                      {feature.desc}
-                    </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center justify-center">
+            {featureCards.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{  opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ duration: 1, delay: 0.5 * (index + 1) }}
+                className={`feature w-full  h-[10rem] mb-5 px-3 ${
+                  index > 0
+                    ? `ml-${index * 10} md:ml-[${-30 + index * 10}%]`
+                    : ""
+                }`}
+              >
+                <Card className="bg-slate-100">
+                  <div className="content flex flex-row gap-3">
+                    <div className="flex flex-col gap-2">
+                      <span className="feature-title font-bold text-blue-700 text-xl">{feature.title}</span>
+                      <span className="feature-desc text-[12px] tracking-tight">
+                        {feature.desc}
+                      </span>
+                    </div>
+                    <div className="f-image w-full">
+                      <img
+                        className="size-[120px] rounded-full hidden md:block"
+                        src={feature.imgSrc}
+                        alt="illustration"
+                      />
+                    </div>
                   </div>
-                  <div className="f-image w-full">
-                    <img
-                      className="size-[120px] rounded-full hidden md:block"
-                      src={feature.imgSrc}
-                      alt="illustration"
-                    />
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* How It Works Section */}
