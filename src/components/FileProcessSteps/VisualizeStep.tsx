@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import VisualizationChoice from "../Charts/VisualizationChoice";
 
 function VisualizeStep({ fileData }) {
+
   const [isValid, setIsValid] = useState(false);
   useEffect(() => {
     console.log("file data", fileData);
@@ -32,6 +33,8 @@ function VisualizeStep({ fileData }) {
   return (
     <div>
       {isValid ? (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
         <VisualizationChoice fileData={fileData} />
       ) : (
         <span className="m-2 text-red-500">
@@ -40,7 +43,7 @@ function VisualizeStep({ fileData }) {
         </span>
       )}
     </div>
-  );
+  ); 
 }
 
 export default VisualizeStep;

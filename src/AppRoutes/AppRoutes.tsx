@@ -7,10 +7,10 @@ import {
 
 import Home from "../pages/Home/Home";
 import Dashboard from "../pages/Dashboard/Dashboard";
-import DataIngestion from "../pages/DataIngestion/DataIngestion";
 import Layout from "../components/Layout/Layout";
 import AuthCallbackPage from "../pages/AuthCallback";
 import VisualizePage from "../pages/VisualizePage/VisualizePage";
+import DataIngestion from "../pages/DataIngestion/DataIngestion";
 const router = createBrowserRouter([
   {
     element: <Layout />,

@@ -75,7 +75,7 @@ export default function LineChart({data}) {
   };
   return (
     <div style={{ width: "50%", margin: "auto" }}>
-      <Line data={dataToShow} options={options} />
+      <Line data={dataToShow} options={options as any} />
     </div>
   );
 }

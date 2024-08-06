@@ -21,9 +21,7 @@ export const useVerifyUser = () => {
           },
         }
       );
-      if (!res.data.success) {
-        throw new Error(res.data.message);
-      }
+   
       console.log(res.data);
       return res.data;
     } catch (err) {

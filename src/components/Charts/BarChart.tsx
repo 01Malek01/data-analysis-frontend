@@ -62,7 +62,7 @@ export default function BarChart({ data }) {
       },
       title: {
         display: true,
-        text: "Bar Chart Example",
+        text: "Visualize Data",
       },
     },
     scales: {
@@ -73,7 +73,8 @@ export default function BarChart({ data }) {
   };
   return (
     <div style={{ width: "50%", margin: "auto" }}>
-      <Bar data={dataToShow} options={options} />
+      
+      <Bar data={dataToShow} options={options as any} />
     </div>
   );
 }

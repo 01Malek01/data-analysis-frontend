@@ -1,7 +1,7 @@
 import { InboxOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UploadProps } from "antd";
-import { Form, Upload } from "antd";
+import { Button, Form, Upload } from "antd";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,6 +15,7 @@ import useUploadDownloadUrl from "../../hooks/api/useUploadDownloadUrl";
 import CustomButton from "../UI/CustomButton";
 import useUploadFileData from "../../hooks/api/useUploadData";
 import { useFileContext } from "../../Context/FileContext";
+import { File as FileType } from '../../types/FileType';
 
 const { Dragger } = Upload;
 
@@ -51,7 +52,7 @@ const FileUpload = ({ nextStep, setFileData }) => {
   const { selectedFile, setSelectedFile } = useFileContext();
   const { uploadFileData } = useUploadFileData();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  const [jsonData, setJsonData] = useState(null); // Update type if needed
+  const [jsonData, setJsonData] = useState(null);
 
   const {
     control,
@@ -68,10 +69,12 @@ const FileUpload = ({ nextStep, setFileData }) => {
 
   useEffect(() => {
     if (selectedFile) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
       setValue("excelFile", selectedFile);
     }
   }, [setValue, selectedFile]);
-  const setFile = (info: { file: { originFileObj: File } }) => {
+  const setFile = (info: { file: { originFileObj: FileType } }) => {
     try {
       const reader = new FileReader();
 
@@ -97,6 +100,8 @@ const FileUpload = ({ nextStep, setFileData }) => {
         setJsonData(jsonDataFromSheet);
         setFileData(jsonDataFromSheet);
         setSelectedFile(info.file.originFileObj);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
         setValue("excelFile", info.file.originFileObj);
       };
     } catch (err) {
@@ -105,12 +110,14 @@ const FileUpload = ({ nextStep, setFileData }) => {
     }
   };
 
-  const onChange = (info: { file: { originFileObj: File } }) => {
+  const onChange = (info: { file: { originFileObj: FileType } }) => {
     setFile(info);
   };
 
   const onSubmit = async (data: FormData) => {
-    const file = data.excelFile;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
+    const file: FileType = data.excelFile;
     if (!file) return; // Handle case where file might be undefined
 
     const storageRef = ref(storage, `uploads/${file.name}`);
@@ -139,6 +146,8 @@ const FileUpload = ({ nextStep, setFileData }) => {
     );
   };
 
+  const { loginWithRedirect } = useAuth0();
+
   return isAuthenticated ? (
     <Form
       layout="vertical"
@@ -166,13 +175,19 @@ const FileUpload = ({ nextStep, setFileData }) => {
               <div className="flex flex-col">
                 <p className="text-xl pb-5">
                   Selected file :{" "}
-                  <span className="text-blue-600 text-center">{selectedFile.name}</span>
+                  <span className="text-blue-600 text-center">
+                    {selectedFile.name}
+                  </span>
                 </p>
                 <p className="text-xl">
                   File type :{" "}
-                  <span className="text-blue-600 text-center text-sm md:text-lg ">{selectedFile.type}</span>
+                  <span className="text-blue-600 text-center text-sm md:text-lg ">
+                    {selectedFile.type}
+                  </span>
                 </p>
-                <span className="text-xl text-slate-500/80 mt-5 text-center">Click To Change File</span>
+                <span className="text-xl text-slate-500/80 mt-5 text-center">
+                  Click To Change File
+                </span>
               </div>
             ) : (
               <>
@@ -201,8 +216,18 @@ const FileUpload = ({ nextStep, setFileData }) => {
       </Form.Item>
     </Form>
   ) : (
-    <div className="flex justify-center items-center h-screen">
-      <h1 className="text-3xl">Please sign in to continue</h1>
+    <div className="flex flex-col gap-5 justify-center items-center h-screen">
+      <span className="text-3xl">
+        Oh, you are not signed in. Please sign in to use this feature.{" "}
+      </span>
+      <Button
+        type="primary"
+        size="large"
+        style={{ width: "200px" }}
+        onClick={() => loginWithRedirect()}
+      >
+        Sign In
+      </Button>
     </div>
   );
 };

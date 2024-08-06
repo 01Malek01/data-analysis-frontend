@@ -7,6 +7,7 @@ import { useFileContext } from "../../Context/FileContext";
 
 const useUploadFileData = () => {
   const { getAccessTokenSilently } = useAuth0();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {fileId,setFileId} = useFileContext();
   const uploadFileDataRequest = async (data: any) => {
     try {

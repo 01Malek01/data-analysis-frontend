@@ -5,7 +5,7 @@ import DataPreviewStep from "../../components/FileProcessSteps/DataPreviewStep";
 import VisualizeStep from "../../components/FileProcessSteps/VisualizeStep";
 import { useFileContext } from "../../Context/FileContext";
 
-const DataIngestion: React.FC = () => {
+const DataIngestion = () => {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
   const { fileData, setFileData } = useFileContext();
@@ -50,21 +50,26 @@ const DataIngestion: React.FC = () => {
     marginTop: 16,
   };
 
-  return (
-    <div className="p-6 w-full h-fit  ">
+
+    return(
+
+      
+      <div className="p-6 w-full h-fit  ">
       <Steps current={current} items={items} />
       <div className=" h-full" style={contentStyle}>
-        {steps[current].content}
+      {steps[current].content}
       </div>
       <div style={{ marginTop: 24 }}>
-        {current > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
-            Previous
-          </Button>
-        )}
+      {current > 0 && (
+        <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+        Previous
+        </Button>
+      )}
       </div>
-    </div>
-  );
+      </div>
+  
+)
+  
 };
 
 export default DataIngestion;

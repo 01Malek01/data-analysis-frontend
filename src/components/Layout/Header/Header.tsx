@@ -11,6 +11,7 @@ interface MenuItem {
   label: string;
   key: string;
   icon?: React.ReactNode;
+  children?: MenuItem[];
 }
 
 const Header: React.FC = () => {
@@ -25,9 +26,9 @@ const Header: React.FC = () => {
       icon: <FaHome />,
     },
     {
-      label: "Dashboard",
-      key: "dashboard",
-      icon: <MdDashboard />,
+      label: isAuthenticated ? "Dashboard" : "",
+      key: isAuthenticated ? "dashboard" : "dashboard",
+      icon:  isAuthenticated ? <MdDashboard /> : "" ,
     },
     {
       label: "Ingest Data",
@@ -40,7 +41,7 @@ const Header: React.FC = () => {
       children: [
         {
           label: isAuthenticated ? "Sign Out" : "Sign In",
-          key: isAuthenticated ? "logout" : "signin",
+          key: isAuthenticated ? "logout" : "signin-child",
         },
       ],
     },

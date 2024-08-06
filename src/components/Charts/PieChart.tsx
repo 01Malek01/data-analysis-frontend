@@ -54,7 +54,7 @@ export default function PieChart({ data }) {
   };
   return (
     <div style={{ width: "50%", margin: "auto" }}>
-      <Pie data={dataToShow} options={options} />
+      <Pie data={dataToShow} options={options as any} />
     </div>
   );
 }

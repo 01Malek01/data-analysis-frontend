@@ -65,7 +65,7 @@ export default function RadarChart({ data }) {
   };
   return (
     <div style={{ width: "50%", margin: "auto" }}>
-      <Radar data={dataToShow} options={options} />
+      <Radar data={dataToShow} options={options as any} />
     </div>
   );
 }
