@@ -30,13 +30,13 @@ function FileContextProvider({ children }: FileContextProviderProps) {
   const [allFiles, setAllFiles] = useState<File[] | null>(null);
   const [filteredFiles, setFilteredFiles] = useState<File[] | null>(null);
 
-  useEffect(() => {
-    console.log("selectedFile", selectedFile);
-    console.log("fileData", fileData);
-    console.log("fileId", fileId);
-    console.log("allFiles", allFiles);
-    console.log("filteredFiles", filteredFiles);
-  }, [selectedFile, fileData, fileId, allFiles, filteredFiles]);
+  // useEffect(() => {
+  //   console.log("selectedFile", selectedFile);
+  //   console.log("fileData", fileData);
+  //   console.log("fileId", fileId);
+  //   console.log("allFiles", allFiles);
+  //   console.log("filteredFiles", filteredFiles);
+  // }, [selectedFile, fileData, fileId, allFiles, filteredFiles]);
 
   return (
     <FileContext.Provider

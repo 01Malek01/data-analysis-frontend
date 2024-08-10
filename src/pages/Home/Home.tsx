@@ -91,7 +91,7 @@ function Home() {
           whileInView={{ backgroundColor: "#4592FF" }}
           transition={{ duration: 1, delay: 0.2 }}
           ref={featuresRef}
-          className="features  flex flex-col justify-center items-center gap-6 py-5 pb-8 h-screen"
+          className="features  flex flex-col justify-center items-center gap-6 py-5 pb-8 md:h-screen"
         >
           {/*ADD A VIDEO ILLUSTRATION AFTER FINISHING THE  app */}
           <h2 className=" text-4xl font-bold  text-gray-800 m-5 mb-10 text-center">
@@ -107,7 +107,7 @@ function Home() {
                 transition={{ duration: 1, delay: 0.5 * (index + 1) }}
                 className={`feature w-full  h-[10rem] mb-5 px-3 ${
                   index > 0
-                    ? `ml-${index * 10} md:ml-[${-30 + index * 10}%]`
+                    ? `md:ml-${index * 10} md:ml-[${-30 + index * 10}%]`
                     : ""
                 }`}
               >

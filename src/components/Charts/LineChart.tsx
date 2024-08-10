@@ -30,7 +30,7 @@ const options = {
     },
     title: {
       display: true,
-      text: "Line Chart Example",
+      text: "Line Chart ",
     },
   },
   scales: {
@@ -74,7 +74,7 @@ export default function LineChart({data}) {
     ],
   };
   return (
-    <div style={{ width: "50%", margin: "auto" }}>
+    <div style={{ width: "100%", margin: "auto" }}>
       <Line data={dataToShow} options={options as any} />
     </div>
   );

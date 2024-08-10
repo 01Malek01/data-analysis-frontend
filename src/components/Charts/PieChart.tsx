@@ -14,12 +14,12 @@ const options = {
     },
     title: {
       display: true,
-      text: "Pie Chart Example",
+      text: "Pie Chart ",
     },
   },
 };
 
-export default function PieChart({ data }) {
+export default function PieChart({ data }: any) {
   const xValues = data?.map((el) => Object.values(el)[0]);
   const yValues = data?.map((el) => Object.values(el)[1]);
 
@@ -28,7 +28,7 @@ export default function PieChart({ data }) {
     labels: xValues,
     datasets: [
       {
-        label: "Bar Dataset",
+        label: "Pie Dataset",
         data: yValues,
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
@@ -53,7 +53,7 @@ export default function PieChart({ data }) {
     ],
   };
   return (
-    <div style={{ width: "50%", margin: "auto" }}>
+    <div style={{ width: "60%", margin: "auto" }}>
       <Pie data={dataToShow} options={options as any} />
     </div>
   );

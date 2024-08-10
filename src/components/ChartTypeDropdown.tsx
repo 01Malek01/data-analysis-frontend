@@ -1,5 +1,5 @@
 import { Dropdown, Menu, Button } from "antd";
-import { UpOutlined } from "@ant-design/icons";
+import { DownOutlined } from "@ant-design/icons";
 
 // Define the handleChartTypeChange function outside the component if it's used elsewhere.
 
@@ -19,7 +19,7 @@ function ChartTypeDropdown({onClick} : {onClick: (key) => void}) {
     <div className="flex gap-5">
       <Dropdown overlay={menu}>
         <Button style={{ marginTop: "10px",display: "flex", alignItems: "center" }}>
-          Select Visualization Type <UpOutlined />
+          Select Visualization Type <DownOutlined />
         </Button>
       </Dropdown>
     </div>

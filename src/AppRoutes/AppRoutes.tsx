@@ -11,12 +11,14 @@ import Layout from "../components/Layout/Layout";
 import AuthCallbackPage from "../pages/AuthCallback";
 import VisualizePage from "../pages/VisualizePage/VisualizePage";
 import DataIngestion from "../pages/DataIngestion/DataIngestion";
+import Profile from "../pages/Profile/Profile";
 const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
       { path: "*", element: <Root /> },
       { path: "/", element: <Home /> },
+      {path:"/profile" , element: <Profile />},
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/ingest-data", element: <DataIngestion /> },
       {path:"/auth-callback" , element: <AuthCallbackPage />},

@@ -61,9 +61,7 @@ const Header: React.FC = () => {
       loginWithRedirect();
     } else if (e.key === "logout") {
       logout();
-    } else if (e.key === "profile") {
-      return;
-    } else {
+    }  else {
       navigate(e.key);
     }
   };

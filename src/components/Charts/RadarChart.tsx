@@ -26,7 +26,7 @@ const options = {
     },
     title: {
       display: true,
-      text: "Pie Chart Example",
+      text: "Radar Chart ",
     },
   },
 };
@@ -64,7 +64,7 @@ export default function RadarChart({ data }) {
     ],
   };
   return (
-    <div style={{ width: "50%", margin: "auto" }}>
+    <div style={{ width: "60%", margin: "auto" }}>
       <Radar data={dataToShow} options={options as any} />
     </div>
   );

@@ -40,7 +40,7 @@ export default function Dashboard() {
           <h2 className="text-2xl mb-3"> Recent Files</h2>
           {allFiles && allFiles?.length > 0 ? (
             allFiles
-              ?.slice(-4)
+              ?.slice(-5)
               ?.reverse()
               .map((file) => (
                 <Block
@@ -51,13 +51,9 @@ export default function Dashboard() {
                 />
               ))
           ) : (
-            <div className="text-center text-xl">
+            <div className="text-center text-xl mt-20">
               {" "}
-              No current project.
-              <Link className="text-blue-500 underline" to="/ingest-data">
-                {" "}
-                Ingest data now
-              </Link>
+              No recent files at the moment.
             </div>
           )}
         </div>
@@ -86,6 +82,15 @@ export default function Dashboard() {
                 />
               ))
             )
+          ) : isSuccess ? (
+            <div className="text-center text-xl mt-20">
+              {" "}
+              No files found.
+              <Link className="text-blue-500 underline" to="/ingest-data">
+                {" "}
+                Ingest data now
+              </Link>
+            </div>
           ) : (
             <LoadingSpinner />
           )}
