@@ -54,7 +54,7 @@ const DataIngestion = () => {
     return(
 
       
-      <div className="p-6 w-full h-fit  ">
+      <div className="p-6 w-full h-fit bg-slate-100  ">
       <Steps current={current} items={items} />
       <div className=" h-full" style={contentStyle}>
       {steps[current].content}

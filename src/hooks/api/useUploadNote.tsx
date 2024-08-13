@@ -6,13 +6,13 @@ export type NoteData = {
   id?: string;
   text?: string;
   userId?: string;
-  createdAt?: Date;
+  createdAt?:  string | Date;
   noteId?: string ;
   _id?: string;
 };
 export const useUploadNote = () => {
   const { getAccessTokenSilently } = useAuth0();
-  const uploadNoteRequest = async (data) => {
+  const uploadNoteRequest = async (data ) => {
     const token = await getAccessTokenSilently();
     const res = await axios.post(
       `${import.meta.env.VITE_BACKEND_URL}/file-data/${data.id}/note`,
@@ -28,7 +28,7 @@ export const useUploadNote = () => {
   };
 
   const { mutateAsync: uploadNote } = useMutation({
-    mutationFn: (data) => uploadNoteRequest(data),
+    mutationFn: (data: NoteData) => uploadNoteRequest(data),
     onSuccess: (data) => {
       console.log(data);
     },

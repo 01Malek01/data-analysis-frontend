@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode } from "react";
 import { File } from "../types/FileType";
 
 // Define the shape of the context state

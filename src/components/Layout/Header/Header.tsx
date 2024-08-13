@@ -3,9 +3,10 @@ import { FaHome } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { TbDatabaseImport } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import { Menu } from "antd"; // Assuming you're keeping Ant Design's Menu
+import { Menu } from "antd";
 import { useAuth0 } from "@auth0/auth0-react";
-import type { MenuProps } from "antd"; // Importing type for MenuProps
+import type { MenuProps } from "antd"; 
+import MobileMenu from "../../UI/MobileMenu";
 
 interface MenuItem {
   label: string;
@@ -67,22 +68,25 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div className="header flex items-center justify-between pt-2 h-fit">
-      <div className="logo">
+    <div className="header  w-full  flex flex-col md:flex-row items-center  dark:!bg-slate-300/70 dark:text-white justify-between  h-[70px]">
+      <div className="logo  flex items-center justify-center  ">
         <img
-          className="size-[60px]"
+          className="size-[40px] md:size-[60px] object-contain rounded-full  "
           src="_852c2272-c1a1-418d-86f4-b23532dd0cb6.jpg"
           alt="logo"
         />
       </div>
-      <div className="menu w-full flex-1">
+      <div className="menu w-full flex-1  top-0 fixed md:relative z-20 md:z-0 ">
         <Menu
           onClick={onClick}
           selectedKeys={[current]}
           mode="horizontal"
           items={items}
-          className="justify-end w-full py-2"
+          style={{ border: "none",height:"100%" }}
+          className="justify-center md:justify-end w-full h-full py-2 hidden md:flex  dark:!text-white dark:!bg-slate-300/70"
         />
+        
+        <MobileMenu className="md:hidden" />
       </div>
     </div>
   );

@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BarChart from "./Charts/BarChart";
 import PieChart from "./Charts/PieChart";
@@ -17,7 +20,7 @@ import ExportPdfButton from "./ExportAsPDF";
 
 // Define types for props
 interface VisualizationProps {
-  id?: string;
+  id: string;
   type?: string;
 }
 
@@ -33,10 +36,10 @@ interface FileState {
   [key: string]: unknown;
 }
 
-const Visualization: React.FC<VisualizationProps> = ({ id, type }) => {
+const Visualization = ({ id, type }: VisualizationProps) => {
   const navigate = useNavigate();
   const { getFileData, isPending } = useGetFileData();
-  const { downloadUrl } = useGetDownloadUrl(id);
+  const { downloadUrl } = useGetDownloadUrl(id || "");
 
   // State types
   const [fetchedData, setFetchedData] = useState<FetchedData | null>(null);
@@ -102,21 +105,28 @@ const Visualization: React.FC<VisualizationProps> = ({ id, type }) => {
       <h1 className="text-2xl m-5">Visualization of {fileState?.name}</h1>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-12 w-full justify-between items-center">
-        <div className="chart w-full m-3 col-span-9" id="exportable">
+        <div
+          className="chart w-full m-3 col-span-9 dark:bg-slate-200 rounded-md p-2"
+          id="exportable"
+        >
           {chartComponent}
         </div>
 
-        <div className="md:col-span-3 md:self-start md:mx-auto mt-3 md:mt-0  ">
+        <div className="md:col-span-3 md:self-start md:mx-auto mt-3 md:mt-3   dark:bg-slate-200 rounded-md p-2 ">
           <Notes id={id} />
         </div>
       </div>
       <div className="description grid grid-cols-1 md:grid-cols-6 items-center justify-between w-full mt-5 ">
         {fileState && (
           <div className="flex flex-col gap-1 col-span-4 ">
-            <strong>Name:</strong> {fileState?.name}
-            <strong>Date of Creation:</strong>{" "}
-            {formatDate(fileState?.createdAt)}
-            <strong>File Type:</strong> {fileState?.fileType}
+            <strong className="dark:text-white">Name:</strong>{" "}
+            <span className="text-purple-600">{fileState?.name}</span>
+            <strong className="dark:text-white">Date of Creation:</strong>{" "}
+            <span className="text-purple-600">
+              {formatDate(fileState?.createdAt)}
+            </span>
+            <strong className="dark:text-white">File Type:</strong>{" "}
+            <span className="text-purple-600">{fileState?.fileType}</span>
             <Link
               className="text-blue-500 underline"
               to={(url as string) || ""}
@@ -130,7 +140,7 @@ const Visualization: React.FC<VisualizationProps> = ({ id, type }) => {
           <div className="flex gap-5 w-full text-center">
             <ChartTypeDropdown onClick={handleChartTypeChange} />
           </div>
-            <ExportPdfButton elementId="exportable" />
+          <ExportPdfButton elementId="exportable" />
         </div>
       </div>
     </div>

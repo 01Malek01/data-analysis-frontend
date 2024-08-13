@@ -1,3 +1,4 @@
+
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Divider, Form, Input } from "antd";
 import { useGetUser } from "../../hooks/api/useGetUser";
@@ -17,6 +18,7 @@ const emailSchema = z.object({
 });
 
 type EmailFormData = z.infer<typeof emailSchema>;
+
 function Profile() {
   const { isAuthenticated, logout } = useAuth0();
   const { user, isLoading, isError } = useGetUser();
@@ -24,33 +26,52 @@ function Profile() {
   const [disabled, setDisabled] = useState(true);
   const [editing, setEditing] = useState(false);
   const { filesCount } = useGetFilesCount();
-const { updateUserEmail } = useUpdateUserEmail();
+  const { updateUserEmail } = useUpdateUserEmail();
 
-  const { register, handleSubmit,setValue, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<EmailFormData>({
     resolver: zodResolver(emailSchema),
     defaultValues: { email: userState?.email },
   });
+
   useEffect(() => {
-    if (isAuthenticated) {
-      console.log("user", user);
+    if (isAuthenticated && user) {
       setUserState(user);
     }
   }, [user, isAuthenticated]);
-const onSaveEmail = async (data: EmailFormData) => {
-  await updateUserEmail(data.email);
-  setEditing(!editing);
-  setDisabled(!disabled);
- 
-}
+
+  const onSaveEmail = async (data: EmailFormData) => {
+    try {
+      await updateUserEmail(data.email);
+      setEditing(false);
+      setDisabled(true);
+      toast.success("Email updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update email");
+    }
+  };
+
   if (isLoading) return <LoadingSpinner />;
-  if (isError) return toast.error("Failed to fetch user data");
+  if (isError) {
+    toast.error("Failed to fetch user data");
+    return null;
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+    <div className="flex flex-col items-center justify-center h-screen dark:bg-slate-800 dark:text-white">
+      <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md dark:bg-slate-700 dark:text-white">
         <h1 className="text-2xl font-bold text-center mb-4">Profile</h1>
         <Form layout="vertical">
           <Form.Item label="Username">
-            <Input value={userState?.name} disabled />
+            <Input
+              value={userState?.name}
+              disabled
+              className="dark:bg-slate-600 dark:border-slate-500 dark:text-white"
+            />
           </Form.Item>
           <Form.Item label="Email">
             <Input
@@ -59,6 +80,7 @@ const onSaveEmail = async (data: EmailFormData) => {
               required
               placeholder={userState?.email}
               disabled={disabled}
+              className="dark:bg-slate-600 dark:border-slate-500 dark:text-white"
               addonAfter={
                 editing ? (
                   <Button
@@ -69,10 +91,10 @@ const onSaveEmail = async (data: EmailFormData) => {
                       height: "30px",
                       width: "100px",
                     }}
-                    onClick={
-                      handleSubmit(onSaveEmail)
-                    }
-                  > Save</Button>
+                    onClick={handleSubmit(onSaveEmail)}
+                  >
+                    Save
+                  </Button>
                 ) : (
                   <Button
                     size="middle"
@@ -83,14 +105,18 @@ const onSaveEmail = async (data: EmailFormData) => {
                       width: "100px",
                     }}
                     onClick={() => {
-                      setEditing(!editing);
-                      setDisabled(!disabled);
+                      setEditing(true);
+                      setDisabled(false);
                     }}
-                  > Edit</Button>
+                  >
+                    Edit
+                  </Button>
                 )
               }
             />
-            {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500">{errors.email.message}</p>
+            )}
           </Form.Item>
           <Form.Item label="Joined">
             <span>{formatDate(userState?.createdAt)}</span>

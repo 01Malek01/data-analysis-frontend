@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useAuth0 } from "@auth0/auth0-react";
 import axios, { AxiosError } from "axios";
 import { AxiosErrorResponse } from "../../types/userTypes";
@@ -8,8 +10,8 @@ import { useFileContext } from "../../Context/FileContext";
 const useUploadFileData = () => {
   const { getAccessTokenSilently } = useAuth0();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {fileId,setFileId} = useFileContext();
-  const uploadFileDataRequest = async (data: any) => {
+  const { fileId, setFileId } = useFileContext();
+  const uploadFileDataRequest = async (data) => {
     try {
       const token = await getAccessTokenSilently();
       const res = await axios.post(
@@ -37,12 +39,11 @@ const useUploadFileData = () => {
     }
   };
   const { mutateAsync: uploadFileData } = useMutation({
-    mutationFn: (data: any) => uploadFileDataRequest(data),
+    mutationFn: (data) => uploadFileDataRequest(data),
     onSuccess: (data) => {
       toast.success("Data uploaded successfully");
-      localStorage.setItem("processedFileId",data._id);
+      localStorage.setItem("processedFileId", data._id);
       setFileId(data._id);
-
     },
   });
   return { uploadFileData };

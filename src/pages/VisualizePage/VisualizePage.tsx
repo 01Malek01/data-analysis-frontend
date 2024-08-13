@@ -6,7 +6,7 @@ function VisualizePage() {
   const chartType =  params.chartType;
 
   const id = params.id;
-  return <Visualization type={chartType} id={id} />;
+  return <Visualization type={chartType} id={id as string} />;
 }
 
 export default VisualizePage;

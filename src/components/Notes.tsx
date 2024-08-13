@@ -7,28 +7,37 @@ import { useGetFileData } from "../hooks/api/useGetFileData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDeleteNote } from "../hooks/api/useDeleteNote";
 
+// Define the schema for form validation using zod
 const noteSchema = z.object({
-  text: z.string().min(3),
+  text: z
+    .string()
+    .min(3, { message: "Note must be at least 3 characters long" }),
 });
 
+// Infer the form data type from the zod schema
 type NoteFormData = z.infer<typeof noteSchema>;
-function Notes({
-  id,
-}: {
+
+// Define the component's props
+interface NotesProps {
   notes: { text: string; userId: string; createdAt: Date }[];
   id: string;
-}) {
+}
+
+function Notes({ id }: NotesProps) {
   const { getFileData } = useGetFileData();
   const { deleteNote, isPending } = useDeleteNote();
 
+  // State to manage the notes
   const [notesState, setNotesState] = useState<
     { text: string; userId: string; createdAt: Date; _id: string }[]
   >([]);
+
   useEffect(() => {
     getFileData({ id }).then((data) => {
       setNotesState(data?.notes || []);
     });
   }, [id, getFileData]);
+
   const { uploadNote } = useUploadNote();
   const {
     handleSubmit,
@@ -43,8 +52,7 @@ function Notes({
   const onSubmit = async (data: NoteFormData) => {
     try {
       const updatedNotes = await uploadNote({ id, text: data.text });
-      setNotesState(() => [...updatedNotes]);
-      setValue("text", "");
+      setNotesState([...updatedNotes]);
       reset(); // Reset form fields
     } catch (error) {
       console.error("Failed to upload note:", error);
@@ -52,8 +60,12 @@ function Notes({
   };
 
   const onDeleteNote = async (noteId: string) => {
-    const newNotes = await deleteNote({ id, noteId });
-    setNotesState(newNotes);
+    try {
+      const newNotes = await deleteNote({ id, noteId });
+      setNotesState(newNotes);
+    } catch (error) {
+      console.error("Failed to delete note:", error);
+    }
   };
 
   return (
@@ -77,7 +89,7 @@ function Notes({
         {errors.text && <p>{errors.text.message}</p>}
       </Form>
       <Divider />
-      {notesState?.map((note) => (
+      {notesState.map((note) => (
         <Card
           style={{
             marginBottom: "10px",
@@ -87,8 +99,8 @@ function Notes({
         >
           <div className="flex flex-col">
             <span
-              className="underline text-red-500 self-end cursor-pointer "
-              onClick={() => onDeleteNote(note?._id)}
+              className="underline text-red-500 self-end cursor-pointer"
+              onClick={() => onDeleteNote(note._id)}
             >
               {isPending ? (
                 <svg
@@ -96,11 +108,13 @@ function Notes({
                   viewBox="0 0 24 24"
                 ></svg>
               ) : (
-                " Delete"
+                "Delete"
               )}
             </span>
-            <p className="text-lg mb-1">{note?.text}</p>
-            <span className="text-sm text-slate-500/70">{note?.createdAt}</span>
+            <p className="text-lg mb-1">{note.text}</p>
+            <span className="text-sm text-slate-500/70">
+              {new Date(note.createdAt).toLocaleString()}{" "}
+            </span>
           </div>
         </Card>
       ))}

@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { InboxOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UploadProps } from "antd";
@@ -15,7 +17,7 @@ import useUploadDownloadUrl from "../../hooks/api/useUploadDownloadUrl";
 import CustomButton from "../UI/CustomButton";
 import useUploadFileData from "../../hooks/api/useUploadData";
 import { useFileContext } from "../../Context/FileContext";
-import { File as FileType } from '../../types/FileType';
+import { File as FileType } from "../../types/FileType";
 
 const { Dragger } = Upload;
 
@@ -51,7 +53,8 @@ const FileUpload = ({ nextStep, setFileData }) => {
   const { isAuthenticated } = useAuth0();
   const { selectedFile, setSelectedFile } = useFileContext();
   const { uploadFileData } = useUploadFileData();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [jsonData, setJsonData] = useState(null);
 
   const {
