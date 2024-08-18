@@ -7,17 +7,14 @@ import { useGetFileData } from "../hooks/api/useGetFileData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDeleteNote } from "../hooks/api/useDeleteNote";
 
-// Define the schema for form validation using zod
 const noteSchema = z.object({
   text: z
     .string()
     .min(3, { message: "Note must be at least 3 characters long" }),
 });
 
-// Infer the form data type from the zod schema
 type NoteFormData = z.infer<typeof noteSchema>;
 
-// Define the component's props
 interface NotesProps {
   notes: { text: string; userId: string; createdAt: Date }[];
   id: string;
@@ -26,11 +23,10 @@ interface NotesProps {
 function Notes({ id }: NotesProps) {
   const { getFileData } = useGetFileData();
   const { deleteNote, isPending } = useDeleteNote();
-
-  // State to manage the notes
   const [notesState, setNotesState] = useState<
     { text: string; userId: string; createdAt: Date; _id: string }[]
   >([]);
+  const [deletingNoteId, setDeletingNoteId] = useState<string | null>(null);
 
   useEffect(() => {
     getFileData({ id }).then((data) => {
@@ -51,20 +47,25 @@ function Notes({ id }: NotesProps) {
 
   const onSubmit = async (data: NoteFormData) => {
     try {
-      const updatedNotes = await uploadNote({ id, text: data.text });
+      const res = await uploadNote({ id, text: data.text });
+      const updatedNotes = res.notes;
       setNotesState([...updatedNotes]);
-      reset(); // Reset form fields
+      reset();
     } catch (error) {
       console.error("Failed to upload note:", error);
     }
   };
 
   const onDeleteNote = async (noteId: string) => {
+    setDeletingNoteId(noteId);
     try {
-      const newNotes = await deleteNote({ id, noteId });
+      const res = await deleteNote({ id, noteId });
+      const newNotes = res.notes;
       setNotesState(newNotes);
     } catch (error) {
       console.error("Failed to delete note:", error);
+    } finally {
+      setDeletingNoteId(null);
     }
   };
 
@@ -89,35 +90,36 @@ function Notes({ id }: NotesProps) {
         {errors.text && <p>{errors.text.message}</p>}
       </Form>
       <Divider />
-      {notesState.map((note) => (
-        <Card
-          style={{
-            marginBottom: "10px",
-            width: "100%",
-          }}
-          key={note._id}
-        >
-          <div className="flex flex-col">
-            <span
-              className="underline text-red-500 self-end cursor-pointer"
-              onClick={() => onDeleteNote(note._id)}
-            >
-              {isPending ? (
-                <svg
-                  className="animate-spin h-5 w-5 mr-3 rounded-full border-b-4 border-blue-500"
-                  viewBox="0 0 24 24"
-                ></svg>
-              ) : (
-                "Delete"
-              )}
-            </span>
-            <p className="text-lg mb-1">{note.text}</p>
-            <span className="text-sm text-slate-500/70">
-              {new Date(note.createdAt).toLocaleString()}{" "}
-            </span>
-          </div>
-        </Card>
-      ))}
+      {Array.isArray(notesState) &&
+        notesState?.map((note, index) => (
+          <Card
+            style={{
+              marginBottom: "10px",
+              width: "100%",
+            }}
+            key={index}
+          >
+            <div className="flex flex-col">
+              <span
+                className="underline text-red-500 self-end cursor-pointer"
+                onClick={() => onDeleteNote(note._id)}
+              >
+                {isPending && deletingNoteId === note._id ? (
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3 rounded-full border-b-4 border-blue-500"
+                    viewBox="0 0 24 24"
+                  ></svg>
+                ) : (
+                  "Delete"
+                )}
+              </span>
+              <p className="text-lg mb-1">{note.text}</p>
+              <span className="text-sm text-slate-500/70">
+                {new Date(note.createdAt).toLocaleString()}{" "}
+              </span>
+            </div>
+          </Card>
+        ))}
     </>
   );
 }

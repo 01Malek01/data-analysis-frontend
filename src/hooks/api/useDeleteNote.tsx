@@ -22,9 +22,6 @@ export const useDeleteNote = () => {
 
   const { mutateAsync: deleteNote, isPending } = useMutation({
     mutationFn: (data: NoteData) => deleteNoteRequest(data),
-    onSuccess: (data) => {
-      console.log("Note deleted:", data);
-    },
   });
 
   return { deleteNote, isPending };

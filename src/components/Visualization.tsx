@@ -51,7 +51,7 @@ const Visualization = ({ id, type }: VisualizationProps) => {
 
   useEffect(() => {
     if (downloadUrl) {
-      setUrl(downloadUrl);
+      setUrl(downloadUrl.uploadUrl);
     }
     if (id) {
       getFileData({ id })
