@@ -14,7 +14,7 @@ function Home() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   const navigate = useNavigate();
   useEffect(()=>{
-    console.log(import.process.env.VITE_AUTH0_DOMAIN)
+    console.log(import.meta.env.VITE_AUTH0_DOMAIN)
   },[])
   const featureCards = [
     {
