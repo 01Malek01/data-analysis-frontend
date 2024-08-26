@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:5173,https://data-analysis-frontend-wine.vercel.app/"],
+    "origin": ["https://data-analysis-frontend-wine.vercel.app"],
     "method": ["GET", "POST", "PUT"],
     "maxAgeSeconds": 3600,
     "responseHeader": ["Content-Type", "Authorization"]
