@@ -1,8 +1,8 @@
 import { Button, Card } from "antd";
 import GradientButton from "../../components/UI/GradientButton";
 import "./Home.css";
-import { motion, useInView } from "framer-motion";
-import { useRef,useEffect } from "react";
+import { motion, oceanview } from "framer-motion";
+import { useRef } from "react";
 import Footer from "../../components/Footer";
 import { PiPlugsConnectedLight } from "react-icons/pi";
 import { TbAnalyze } from "react-icons/tb";
@@ -13,9 +13,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 function Home() {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   const navigate = useNavigate();
-  useEffect(()=>{
-    console.log(import.meta.env.VITE_AUTH0_DOMAIN)
-  },[])
+
   const featureCards = [
     {
       title: "Real-Time Data Integration",
