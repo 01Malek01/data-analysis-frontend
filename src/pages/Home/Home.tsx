@@ -2,7 +2,7 @@ import { Button, Card } from "antd";
 import GradientButton from "../../components/UI/GradientButton";
 import "./Home.css";
 import { motion, useInView } from "framer-motion";
-import { useRef,useEffect } from "react";
+import { useRef } from "react";
 import Footer from "../../components/Footer";
 import { PiPlugsConnectedLight } from "react-icons/pi";
 import { TbAnalyze } from "react-icons/tb";
